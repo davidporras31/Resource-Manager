@@ -2,15 +2,14 @@
 #define TESTLOADER_H
 
 #include <iostream>
-#include <any>
 #include "../ResourceLoader.h"
 class TestLoader : public ResourceLoader
 {
 public:
     TestLoader();
-    ~TestLoader();
 
-    Resource<std::any>* loadResources(std::string key, std::string path, std::vector<std::string> params);
+    void* loadResources(std::string path, std::vector<std::string> params) override;
+    void unloadResources(void* resource) override;
 };
 
 #endif // TESTLOADER_H

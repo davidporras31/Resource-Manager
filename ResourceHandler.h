@@ -1,0 +1,29 @@
+#ifndef RESOURCE_HANDLER_H
+#define RESOURCE_HANDLER_H
+
+#include <atomic>
+#include <cstddef>
+#include "ResourceLoader.h"
+
+class ResourceHandler {
+public:
+    ResourceHandler(ResourceLoader* loader, const std::string& path, const std::vector<std::string>& params, size_t initialCount = 0);
+    ~ResourceHandler();
+
+    void releaseResource();
+    void loanResource();
+
+    void reloadResource();
+    
+    size_t getLoaderId();
+    void* getResource();
+
+private:
+    std::atomic<size_t> resourceCount;
+    void* resource; // Pointer to the actual resource
+    ResourceLoader* loader; // Pointer to the loader that manages this resource
+    std::string path;
+    std::vector<std::string> params;
+};
+
+#endif // RESOURCE_HANDLER_H

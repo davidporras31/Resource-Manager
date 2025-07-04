@@ -8,15 +8,17 @@ int main()
     resourceManager.printLoaders();
     resourceManager.addKeys("../test/resources.keys");
     resourceManager.printKeys();
-    Resource<char>* resource = resourceManager.get<char>("example_resource");
-    char* res = resource->get();
+    Resource* resource = resourceManager.get("example_resource");
+    std::string* res = resource->get<std::string>();
     if (res)
     {
-        std::cout << "Resource loaded: " << res << std::endl;
+        std::cout << "Resource loaded: " << *res << std::endl;
     }
     else
     {
         std::cout << "Failed to load resource." << std::endl;
     }
+    resourceManager.purgeKeys();
+    resourceManager.purgeLoaders();
     return 0;
 }

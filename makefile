@@ -1,3 +1,6 @@
+
+COMPYLE_ARGS := -g -std=c++17 -Wall
+
 all: config test
 
 config:
@@ -5,9 +8,11 @@ config:
 	mkdir -p obj
 
 resource-manager:
-	g++ -std=c++17 -o obj/resource-manager.o -c ResourceManager.cpp
+	g++ ${COMPYLE_ARGS}  -o obj/resource-manager.o -c ResourceManager.cpp
 resource-loader:
-	g++ -std=c++17 -o obj/resource-loader.o -c ResourceLoader.cpp
+	g++ ${COMPYLE_ARGS}  -o obj/resource-loader.o -c ResourceLoader.cpp
+resource-handler:
+	g++ ${COMPYLE_ARGS}  -o obj/resource-handler.o -c ResourceHandler.cpp
 	
 clean:
 	rm -rf bin/*
@@ -15,7 +20,7 @@ clean:
 	rmdir bin
 	rmdir obj
 
-test: resource-manager resource-loader test-loader
-	g++ -std=c++17 -o bin/resource-manager.exe test/main.cpp obj/resource-loader.o obj/test-loader.o obj/resource-manager.o
+test: resource-manager resource-loader test-loader resource-handler
+	g++ ${COMPYLE_ARGS}  -o bin/resource-manager.exe test/main.cpp obj/resource-loader.o obj/test-loader.o obj/resource-manager.o obj/resource-handler.o
 test-loader:
-	g++ -std=c++17 -o obj/test-loader.o -c test/TestLoader.cpp
+	g++ ${COMPYLE_ARGS}  -o obj/test-loader.o -c test/TestLoader.cpp

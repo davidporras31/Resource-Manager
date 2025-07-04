@@ -1,6 +1,6 @@
 #include "ResourceLoader.h"
 
-ResourceLoader::ResourceLoader(std::string name):name(name)
+ResourceLoader::ResourceLoader(std::string name):name(name), id(std::hash<std::string>()(name))
 {
 
 }
