@@ -1,7 +1,7 @@
 #include "ResourceHandler.h"
 
-ResourceHandler::ResourceHandler(ResourceLoader *loader, const std::string &path, const std::vector<std::string> &params, size_t initialCount)
-: resourceCount(initialCount), resource(nullptr), loader(loader), path(path), params(params) 
+ResourceHandler::ResourceHandler(ResourceLoader *loader, const std::string &path, const std::vector<std::string> &params, size_t initialCount, bool collectible)
+: resourceCount(initialCount), collectible(collectible), collected(false), resource(nullptr), loader(loader), path(path), params(params)
 {
     if(initialCount > 0) reloadResource();
 }
@@ -19,8 +19,17 @@ void ResourceHandler::releaseResource()
     {
         if(resource)
         {
-            loader->unloadResources(resource);
-            resource = nullptr; // Clear the resource pointer to avoid dangling pointers
+            if (collectible)
+            {
+                loader->addToTrash(this);
+                collected = true;
+            }
+            else
+            {
+                // If not collectible, unload the resource immediately
+                loader->unloadResources(resource);
+                resource = nullptr; // Clear the resource pointer to avoid dangling pointers
+            }
         }
     }
 }
@@ -30,6 +39,11 @@ void ResourceHandler::loanResource()
     if(!resource)
     {
         resource = loader->loadResources(path, params);
+    }
+    if(collected)
+    {
+        loader->removeFromTrash(this);
+        collected = false;
     }
     resourceCount.fetch_add(1);
 }

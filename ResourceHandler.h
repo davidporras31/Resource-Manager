@@ -7,7 +7,7 @@
 
 class ResourceHandler {
 public:
-    ResourceHandler(ResourceLoader* loader, const std::string& path, const std::vector<std::string>& params, size_t initialCount = 0);
+    ResourceHandler(ResourceLoader* loader, const std::string& path, const std::vector<std::string>& params, size_t initialCount = 0, bool collectible = false);
     ~ResourceHandler();
 
     void releaseResource();
@@ -20,6 +20,7 @@ public:
 
 private:
     std::atomic<size_t> resourceCount;
+    bool collectible, collected;
     void* resource; // Pointer to the actual resource
     ResourceLoader* loader; // Pointer to the loader that manages this resource
     std::string path;
