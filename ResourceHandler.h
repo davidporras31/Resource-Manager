@@ -13,6 +13,9 @@ public:
     void releaseResource();
     void loanResource();
 
+    void loadResource();
+    void unloadResource();
+
     void reloadResource();
     
     size_t getLoaderId();

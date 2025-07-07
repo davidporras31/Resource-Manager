@@ -15,6 +15,9 @@ public:
 
     void addToTrash(void* resource);
     void removeFromTrash(void* resource);
+    std::deque<void*>& getTrash() {
+        return trash;
+    }
 
     std::string getName();
     size_t getId() const {

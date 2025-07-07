@@ -7,11 +7,7 @@ ResourceHandler::ResourceHandler(ResourceLoader *loader, const std::string &path
 }
 ResourceHandler::~ResourceHandler()
 {
-    if (resource)
-    {
-        loader->unloadResources(resource);
-        resource = nullptr; // Clear the resource pointer to avoid dangling pointers
-    }
+    this->unloadResource();
 }
 void ResourceHandler::releaseResource()
 {
@@ -36,10 +32,7 @@ void ResourceHandler::releaseResource()
 
 void ResourceHandler::loanResource()
 {
-    if(!resource)
-    {
-        resource = loader->loadResources(path, params);
-    }
+    this->loadResource();
     if(collected)
     {
         loader->removeFromTrash(this);
@@ -50,11 +43,30 @@ void ResourceHandler::loanResource()
 
 void ResourceHandler::reloadResource()
 {
-    if(resource)
+    this->unloadResource();
+    this->loadResource();
+}
+
+void ResourceHandler::loadResource()
+{
+    if (!resource)
+    {
+        resource = loader->loadResources(path, params);
+    }
+}
+
+void ResourceHandler::unloadResource()
+{
+    if(collected)
+    {
+        loader->removeFromTrash(this);
+        collected = false;
+    }
+    if (resource)
     {
         loader->unloadResources(resource);
+        resource = nullptr; // Clear the resource pointer to avoid dangling pointers
     }
-    resource = loader->loadResources(path, params);
 }
 
 size_t ResourceHandler::getLoaderId()
