@@ -1,0 +1,2 @@
+version,1.1
+example_resource,Test,static,test/resource.txt,param1,param2

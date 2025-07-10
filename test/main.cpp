@@ -6,7 +6,7 @@ int main()
     ResourceManager resourceManager;
     resourceManager.addLoader(new TestLoader());
     resourceManager.printLoaders();
-    resourceManager.addKeys("test/resources.keys");
+    resourceManager.addKeys("test/resources.rslf");
     resourceManager.printKeys();
     Resource* resource = resourceManager.get("example_resource");
     std::string* res = resource->get<std::string>();

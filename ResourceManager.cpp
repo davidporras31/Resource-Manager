@@ -46,17 +46,19 @@ void ResourceManager::addKeys(std::string path)
 
     while (std::getline(stream,line))
     {
-        std::string key, loader, path;
+        std::string key, loader, loading_policy, path;
         std::vector<std::string> params;
         key = getNextValue(line);
         loader = getNextValue(line);
+        loading_policy = getNextValue(line);
         path = getNextValue(line);
         while (line != "")
         {
             params.push_back(getNextValue(line));
         }
         size_t hash = std::hash<std::string>()(key);
-        this->data[hash] = new ResourceHandler(this->loaders[std::hash<std::string>()(loader)], path, params);
+        this->data[hash] = new ResourceHandler(this->loaders[std::hash<std::string>()(loader)], path, params,
+                                                loading_policy == "static" ? 0 : 1, loading_policy == "collectible");
     }
     
 }
@@ -128,26 +130,39 @@ void ResourceManager::purgeKeys()
     }
     this->data.clear();
 }
-void ResourceManager::trashResource(clock_t time)
+void ResourceManager::trashResource(clock_t timeout)
 {
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    auto endTime = currentTime + std::chrono::milliseconds(time);
+    // from sfml clock.hpp
+    using clock = std::conditional_t<
+        std::chrono::high_resolution_clock::is_steady,
+        std::chrono::high_resolution_clock,
+        std::chrono::steady_clock
+    >;
+    auto currentTime = clock::now();
+    auto endTime = currentTime + std::chrono::milliseconds(timeout);
     for(auto it = this->loaders.begin(); it != this->loaders.end(); )
     {
         ResourceLoader* loader = it->second;
         auto& trash = loader->getTrash();
         size_t size = trash.size();
+        bool stop = false;
         for (size_t i = 0; i < size; ++i)
         {
             void* resource = trash.front();
             trash.pop_front();
             ResourceHandler* handler = static_cast<ResourceHandler*>(resource);
             handler->unloadResource();
-        }
-        if(size != 0)
-            if (std::chrono::high_resolution_clock::now() > endTime) {
-                break;
+            if(i == size - 1 || i % 10 == 0)
+            {
+                if (clock::now() >= endTime)
+                {
+                    stop = true;
+                    break;
+                }
             }
+        }
+        if(stop)
+            break;
     }
 }
 Resource *ResourceManager::get(const std::string &name)
@@ -176,7 +191,7 @@ bool ResourceManager::isHeaderValid(std::string &line)
     {
         return false;
     }
-    std::string version_txt = "version", version= "1.0";
+    std::string version_txt = "version", version= "1.1";
     if(version_txt != getNextValue(line))
     {
         return false;
