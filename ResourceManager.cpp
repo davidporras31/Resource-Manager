@@ -148,9 +148,8 @@ void ResourceManager::trashResource(clock_t timeout)
         std::chrono::high_resolution_clock,
         std::chrono::steady_clock
     >;
-    auto currentTime = clock::now();
-    auto endTime = currentTime + std::chrono::milliseconds(timeout);
-    for(auto it = this->loaders.begin(); it != this->loaders.end(); )
+    auto endTime = clock::now() + std::chrono::milliseconds(timeout);
+    for(auto it = loaders.begin(); it != loaders.end(); ++it)
     {
         ResourceLoader* loader = it->second;
         auto& trash = loader->getTrash();
@@ -161,6 +160,7 @@ void ResourceManager::trashResource(clock_t timeout)
             void* resource = trash.front();
             trash.pop_front();
             ResourceHandler* handler = static_cast<ResourceHandler*>(resource);
+            handler->collect();
             handler->unloadResource();
             if(i == size - 1 || i % 10 == 0)
             {

@@ -84,6 +84,12 @@ bool ResourceHandler::isCollectible() const
     return collectible;
 }
 
+void ResourceHandler::collect()
+{
+    if (resource)
+        collected = false;
+}
+
 bool ResourceHandler::isCollected() const
 {
     return collected;

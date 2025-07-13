@@ -22,6 +22,7 @@ public:
     void* getResource();
 
     bool isCollectible() const;
+    void collect();
     bool isCollected() const;
     size_t getResourceCount() const;
 
