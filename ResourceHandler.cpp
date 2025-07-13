@@ -11,7 +11,7 @@ ResourceHandler::~ResourceHandler()
 }
 void ResourceHandler::releaseResource()
 {
-    if (resourceCount.fetch_sub(1) == 0)
+    if (--resourceCount == 0)
     {
         if(resource)
         {
@@ -77,4 +77,19 @@ size_t ResourceHandler::getLoaderId()
 void *ResourceHandler::getResource()
 {
     return resource;
+}
+
+bool ResourceHandler::isCollectible() const
+{
+    return collectible;
+}
+
+bool ResourceHandler::isCollected() const
+{
+    return collected;
+}
+
+size_t ResourceHandler::getResourceCount() const
+{
+    return resourceCount.load(std::memory_order_relaxed);
 }

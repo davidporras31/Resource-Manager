@@ -18,5 +18,6 @@ void* TestLoader::loadResources(std::string path, std::vector<std::string> param
 
 void TestLoader::unloadResources(void *resource)
 {
+    std::cout << "Unloading resource." << std::endl;
     delete (std::string*)resource;
 }

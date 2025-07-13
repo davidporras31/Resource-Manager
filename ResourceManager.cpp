@@ -51,6 +51,11 @@ void ResourceManager::addKeys(std::string path)
         key = getNextValue(line);
         loader = getNextValue(line);
         loading_policy = getNextValue(line);
+        if(loading_policy != "static" && loading_policy != "streamed" && loading_policy != "collected")
+        {
+            std::cerr << "Invalid loading policy for key: " << key << std::endl;
+            return;
+        }
         path = getNextValue(line);
         while (line != "")
         {
@@ -58,7 +63,7 @@ void ResourceManager::addKeys(std::string path)
         }
         size_t hash = std::hash<std::string>()(key);
         this->data[hash] = new ResourceHandler(this->loaders[std::hash<std::string>()(loader)], path, params,
-                                                loading_policy == "static" ? 0 : 1, loading_policy == "collectible");
+                                                loading_policy == "static" ? 1 : 0, loading_policy == "collected");
     }
     
 }
@@ -67,7 +72,12 @@ void ResourceManager::printKeys()
     std::cout << "Keys:" << std::endl;
     for (const auto& entry : data)
     {
-        std::cout << entry.first << ", Loader ID: " << entry.second->getLoaderId() << std::endl;
+        std::cout << entry.first << ", Loader ID: " << entry.second->getLoaderId()
+                << ", Resource Count: " << entry.second->getResourceCount()
+                << ", Collectible: " << (entry.second->isCollectible() ? "Yes" : "No")
+                << ", Collected: " << (entry.second->isCollected() ? "Yes" : "No")
+                << ", Loaded: " << (entry.second->getResource() ? "Yes" : "No")
+                << std::endl;
     }
 }
 void ResourceManager::removeKey(const std::string &key)

@@ -21,6 +21,10 @@ public:
     size_t getLoaderId();
     void* getResource();
 
+    bool isCollectible() const;
+    bool isCollected() const;
+    size_t getResourceCount() const;
+
 private:
     std::atomic<size_t> resourceCount;
     bool collectible, collected;

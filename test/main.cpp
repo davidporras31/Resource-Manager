@@ -1,7 +1,7 @@
 #include "../ResourceManager.h"
 #include "TestLoader.h"
 
-int main()
+int main_test()
 {
     ResourceManager resourceManager;
     resourceManager.addLoader(new TestLoader());
@@ -20,5 +20,86 @@ int main()
     }
     resourceManager.purgeKeys();
     resourceManager.purgeLoaders();
+    return 0;
+}
+int policy_load_test()
+{
+    ResourceManager resourceManager;
+    resourceManager.addLoader(new TestLoader());
+    resourceManager.printLoaders();
+    resourceManager.addKeys("test/policy_load.rslf");
+    resourceManager.printKeys();
+
+    std::cout << "Testing resource loading policies..." << std::endl;
+    
+    // Test loading a resource with static policy
+    Resource* staticResource = resourceManager.get("static_resource");
+    std::string* staticRes = staticResource->get<std::string>();
+    if (staticRes)
+    {
+        std::cout << "Static Resource loaded: " << *staticRes << std::endl;
+    }
+    else
+    {
+        std::cout << "Failed to load static resource." << std::endl;
+    }
+    delete staticResource;
+
+    // Test loading a resource with streamed policy
+    Resource* streamedResource = resourceManager.get("streamed_resource");
+    std::string* streamedRes = streamedResource->get<std::string>();
+    if (streamedRes)
+    {
+        std::cout << "Streamed Resource loaded: " << *streamedRes << std::endl;
+    }
+    else
+    {
+        std::cout << "Failed to load streamed resource." << std::endl;
+    }
+    delete streamedResource;
+
+    // Test loading a resource with collectible policy
+    Resource* collectibleResource = resourceManager.get("collectible_resource");
+    std::string* collectibleRes = collectibleResource->get<std::string>();
+    if (collectibleRes)
+    {
+        std::cout << "Collectible Resource loaded: " << *collectibleRes << std::endl;
+    }
+    else
+    {
+        std::cout << "Failed to load collectible resource." << std::endl;
+    }
+    delete collectibleResource;
+
+    resourceManager.printKeys();
+
+    std::cout << "Testing resource trashing..." << std::endl;
+    resourceManager.trashResource(1000);
+    resourceManager.printKeys();
+
+    resourceManager.purgeKeys();
+    resourceManager.purgeLoaders();
+    
+    return 0;
+}
+int main()
+{
+    std::cout << "Running main_test..." << std::endl;
+    int result = main_test();
+    if (result != 0)
+    {
+        std::cerr << "main_test failed with code: " << result << std::endl;
+        return result;
+    }
+    std::cout << std::endl;
+    
+    std::cout << "Running policy_load_test..." << std::endl;
+    result = policy_load_test();
+    if (result != 0)
+    {
+        std::cerr << "policy_load_test failed with code: " << result << std::endl;
+        return result;
+    }
+    
     return 0;
 }

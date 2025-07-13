@@ -1,0 +1,4 @@
+version,1.1
+static_resource,Test,static,test/static_resource.txt,param1,param2
+streamed_resource,Test,streamed,test/streamed_resource.txt,param1,param2
+collectible_resource,Test,collected,test/collectible_resource.txt,param1,param2
