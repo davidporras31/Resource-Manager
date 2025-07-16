@@ -1,0 +1,2 @@
+version,1.1
+dynamic_hash_resource,Test,static,test/dynamic_resource.txt,param1,param2

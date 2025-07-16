@@ -13,6 +13,8 @@ resource-loader:
 	g++ ${COMPYLE_ARGS}  -o obj/resource-loader.o -c ResourceLoader.cpp
 resource-handler:
 	g++ ${COMPYLE_ARGS}  -o obj/resource-handler.o -c ResourceHandler.cpp
+hash:
+	g++ ${COMPYLE_ARGS}  -o obj/hash.o -c hash.cpp
 	
 clean:
 	rm -rf bin/*
@@ -20,7 +22,7 @@ clean:
 	rmdir bin
 	rmdir obj
 
-test: resource-manager resource-loader test-loader resource-handler
-	g++ ${COMPYLE_ARGS}  -o bin/resource-manager.exe test/main.cpp obj/resource-loader.o obj/test-loader.o obj/resource-manager.o obj/resource-handler.o
+test: resource-manager resource-loader test-loader resource-handler hash
+	g++ ${COMPYLE_ARGS}  -o bin/resource-manager.exe test/main.cpp obj/resource-loader.o obj/test-loader.o obj/resource-manager.o obj/resource-handler.o obj/hash.o
 test-loader:
 	g++ ${COMPYLE_ARGS}  -o obj/test-loader.o -c test/TestLoader.cpp

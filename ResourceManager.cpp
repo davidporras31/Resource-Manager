@@ -8,7 +8,7 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::addLoader(ResourceLoader* loader)
 {
-    this->loaders[std::hash<std::string>()(loader->getName())] = loader;
+    this->loaders[hash(loader->getName().c_str())] = loader;
 }
 void ResourceManager::printLoaders()
 {
@@ -61,8 +61,8 @@ void ResourceManager::addKeys(std::string path)
         {
             params.push_back(getNextValue(line));
         }
-        size_t hash = std::hash<std::string>()(key);
-        this->data[hash] = new ResourceHandler(this->loaders[std::hash<std::string>()(loader)], path, params,
+        hash_t hashValue = hash(key.c_str());
+        this->data[hashValue] = new ResourceHandler(this->loaders[hash(loader.c_str())], path, params,
                                                 loading_policy == "static" ? 1 : 0, loading_policy == "collected");
     }
     
@@ -82,8 +82,8 @@ void ResourceManager::printKeys()
 }
 void ResourceManager::removeKey(const std::string &key)
 {
-    size_t hash = std::hash<std::string>()(key);
-    auto it = this->data.find(hash);
+    hash_t hashValue = hash(key.c_str());
+    auto it = this->data.find(hashValue);
     if (it != this->data.end())
     {
         delete it->second;
@@ -92,7 +92,7 @@ void ResourceManager::removeKey(const std::string &key)
 }
 void ResourceManager::purgeKeysFromLoader(const std::string &loaderName)
 {
-    size_t loaderHash = std::hash<std::string>()(loaderName);
+    hash_t loaderHash = hash(loaderName.c_str());
     for (auto it = this->data.begin(); it != this->data.end(); )
     {
         if (it->second->getLoaderId() == loaderHash)
@@ -175,12 +175,15 @@ void ResourceManager::trashResource(clock_t timeout)
             break;
     }
 }
-Resource *ResourceManager::get(const std::string &name)
+Resource *ResourceManager::get(const char* name)
 {
-    std::hash<std::string> hasher;
-    size_t hash = hasher(name);
-    return new Resource(data.at(hash));
+    return getFromHash(hash(name));
 }
+Resource *ResourceManager::getFromHash(const hash_t &hash)
+{
+    return new Resource(this->data[hash]);
+}
+
 std::string ResourceManager::getNextValue(std::string &txt)
 {
     size_t pos = txt.find(',');

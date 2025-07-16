@@ -18,7 +18,7 @@ public:
 
     void reloadResource();
     
-    size_t getLoaderId();
+    hash_t getLoaderId();
     void* getResource();
 
     bool isCollectible() const;
@@ -29,8 +29,8 @@ public:
 private:
     std::atomic<size_t> resourceCount;
     bool collectible, collected;
-    void* resource; // Pointer to the actual resource
-    ResourceLoader* loader; // Pointer to the loader that manages this resource
+    void* resource;
+    ResourceLoader* loader;
     std::string path;
     std::vector<std::string> params;
 };

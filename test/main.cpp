@@ -82,6 +82,38 @@ int policy_load_test()
     
     return 0;
 }
+
+int dynamic_hash_test()
+{
+    ResourceManager resourceManager;
+    resourceManager.addLoader(new TestLoader());
+    resourceManager.printLoaders();
+    resourceManager.addKeys("test/dynamic_hash.rslf");
+    resourceManager.printKeys();
+
+    std::cout << "Testing dynamic hash..." << std::endl;
+    
+    std::string dynamicResourceName = "dynamic_hash_resource";
+    std::cout << "Loading dynamic hash" << std::endl;
+    Resource* constHashResource = resourceManager.get(dynamicResourceName.c_str());
+    std::string* constHashRes = constHashResource->get<std::string>();
+    if (constHashRes)
+    {
+        std::cout << "dynamic Hash Resource loaded: " << *constHashRes << std::endl;
+    }
+    else
+    {
+        std::cout << "Failed to load dynamic hash resource." << std::endl;
+    }
+    
+    delete constHashResource;
+
+    resourceManager.purgeKeys();
+    resourceManager.purgeLoaders();
+    
+    return 0;
+}
+
 int main()
 {
     std::cout << "Running main_test..." << std::endl;
@@ -100,6 +132,14 @@ int main()
         std::cerr << "policy_load_test failed with code: " << result << std::endl;
         return result;
     }
-    
+    std::cout << std::endl;
+
+    std::cout << "Running dynamic_hash_test..." << std::endl;
+    result = dynamic_hash_test();
+    if (result != 0)
+    {
+        std::cerr << "dynamic_hash_test failed with code: " << result << std::endl;
+        return result;
+    }
     return 0;
 }

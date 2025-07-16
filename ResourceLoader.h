@@ -4,10 +4,11 @@
 #include <vector>
 #include <deque>
 #include <algorithm>
+#include "hash.h"
 
 class ResourceLoader {
 public:
-    ResourceLoader(std::string name);
+    ResourceLoader(const char* name);
     virtual ~ResourceLoader() = default;
 
     /// @brief loads resources from a given path with optional parameters
@@ -28,13 +29,13 @@ public:
     }
 
     std::string getName();
-    size_t getId() const {
+    hash_t getId() const {
         return id;
     }
 
 private:
     std::string name;
-    size_t id;
+    hash_t id;
     std::deque<void*> trash;
 };
 

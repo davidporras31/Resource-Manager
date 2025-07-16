@@ -69,7 +69,7 @@ void ResourceHandler::unloadResource()
     }
 }
 
-size_t ResourceHandler::getLoaderId()
+hash_t ResourceHandler::getLoaderId()
 {
     return loader->getId();
 }

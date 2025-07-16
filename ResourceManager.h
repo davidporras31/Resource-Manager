@@ -10,6 +10,7 @@
 #include "Resource.h"
 #include "ResourceLoader.h"
 #include "ResourceHandler.h"
+#include "hash.h"
 
 // rslf: ReSource List File
 // file format:
@@ -18,8 +19,8 @@
 class ResourceManager
 {
 private:
-    std::map<size_t,ResourceLoader*> loaders;
-    std::map<size_t,ResourceHandler*> data;
+    std::map<hash_t,ResourceLoader*> loaders;
+    std::map<hash_t,ResourceHandler*> data;
     static std::string getNextValue(std::string& txt);
     static bool isHeaderValid(std::string& line);
 public:
@@ -58,7 +59,8 @@ public:
     /// @return a pointer to the resource, or exception if the resource is not found
     /// @note The resource will be loaded if it is not already loaded.
     /// remember to delete the resource when you are done with it.
-    Resource* get(const std::string& name);
+    Resource* get(const char* name);
+    Resource* getFromHash(const hash_t& hash);
 };
 
 #endif // RESOURCEMANAGER_H
