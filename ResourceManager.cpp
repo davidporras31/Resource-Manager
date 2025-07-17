@@ -10,13 +10,15 @@ void ResourceManager::addLoader(ResourceLoader* loader)
 {
     this->loaders[hash(loader->getName().c_str())] = loader;
 }
-void ResourceManager::printLoaders()
+std::string ResourceManager::printLoaders()
 {
-    std::cout << "Loaders:" << std::endl;
+    std::string output;
+    output += "Loaders:\n";
     for (const auto& loader : loaders)
     {
-        std::cout << loader.second->getName() << " (ID: " << loader.second->getId() << ")" << std::endl;
+        output += loader.second->getName() += " (ID: " + std::to_string(loader.second->getId()) += ")\n";
     }
+    return output;
 }
 void ResourceManager::purgeLoaders()
 {
@@ -32,16 +34,14 @@ void ResourceManager::addKeys(std::string path)
     std::string line;
     if(!stream.is_open())
     {
-        std::cerr << "Failed to open file: " << path << std::endl;
-        return;
+        throw fileNotFoundException(path);
     }
 
     //get version
     std::getline(stream,line);
     if (!isHeaderValid(line))
     {
-        std::cerr << "Invalid header in file: " << path << std::endl;
-        return;
+        throw versionMismatchException(path);
     }
 
     while (std::getline(stream,line))
@@ -53,8 +53,7 @@ void ResourceManager::addKeys(std::string path)
         loading_policy = getNextValue(line);
         if(loading_policy != "static" && loading_policy != "streamed" && loading_policy != "collected")
         {
-            std::cerr << "Invalid loading policy for key: " << key << std::endl;
-            return;
+            loading_policy = "streamed";
         }
         path = getNextValue(line);
         while (line != "")
@@ -67,18 +66,20 @@ void ResourceManager::addKeys(std::string path)
     }
     
 }
-void ResourceManager::printKeys()
+std::string ResourceManager::printKeys()
 {
-    std::cout << "Keys:" << std::endl;
+    std::string output;
+    output += "Keys:\n";
     for (const auto& entry : data)
     {
-        std::cout << entry.first << ", Loader ID: " << entry.second->getLoaderId()
-                << ", Resource Count: " << entry.second->getResourceCount()
-                << ", Collectible: " << (entry.second->isCollectible() ? "Yes" : "No")
-                << ", Collected: " << (entry.second->isCollected() ? "Yes" : "No")
-                << ", Loaded: " << (entry.second->getResource() ? "Yes" : "No")
-                << std::endl;
+        output += std::to_string(entry.first) + ", Loader ID: " + std::to_string(entry.second->getLoaderId())
+                += ", Resource Count: " + std::to_string(entry.second->getResourceCount())
+                += ", Collectible: " + std::string(entry.second->isCollectible() ? "Yes" : "No")
+                += ", Collected: " + std::string(entry.second->isCollected() ? "Yes" : "No")
+                += ", Loaded: " + std::string(entry.second->getResource() ? "Yes" : "No")
+                += "\n";
     }
+    return output;
 }
 void ResourceManager::removeKey(const std::string &key)
 {
@@ -112,15 +113,13 @@ void ResourceManager::purgeKeysFromPath(const std::string& path)
     std::string line;
     if(!stream.is_open())
     {
-        std::cerr << "Failed to open file: " << path << std::endl;
-        return;
+        throw fileNotFoundException(path);
     }
     //get version
     std::getline(stream,line);
     if( !isHeaderValid(line))
     {
-        std::cerr << "Invalid header in file: " << path << std::endl;
-        return;
+        throw versionMismatchException(path);
     }
     while (std::getline(stream,line))
     {

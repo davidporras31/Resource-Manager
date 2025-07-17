@@ -1,7 +1,6 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
-#include <iostream>
 #include <string>
 #include <map>
 #include <vector>
@@ -30,7 +29,7 @@ public:
     /// @param loader the loader to add
     /// @note The loader will be deleted when the resource manager is destroyed.
     void addLoader(ResourceLoader* loader);
-    void printLoaders();
+    std::string printLoaders();
     void purgeLoaders();
 
     /// @brief adds keys from a file rslf (ReSource List File)
@@ -39,7 +38,7 @@ public:
     /// @brief removes a key from the resource manager
     /// @param key the key to remove
     void removeKey(const std::string& key);
-    void printKeys();
+    std::string printKeys();
     /// @brief removes all keys from a specific rslf file
     /// @param path the path to the rslf file
     void purgeKeysFromPath(const std::string& path);
@@ -61,6 +60,26 @@ public:
     /// remember to delete the resource when you are done with it.
     Resource* get(const char* name);
     Resource* getFromHash(const hash_t& hash);
+};
+class versionMismatchException : public std::exception
+{
+public:
+    versionMismatchException(const std::string& path) : msg(path) {}
+    const char* what() const noexcept override {
+        return ("Invalid header in file: " + msg).c_str();
+    }
+private:
+    std::string msg;
+};
+class fileNotFoundException : public std::exception
+{
+public:
+    fileNotFoundException(const std::string& path) : msg(path) {}
+    const char* what() const noexcept override {
+        return ("Failed to open file: " + msg).c_str();
+    }
+private:
+    std::string msg;
 };
 
 #endif // RESOURCEMANAGER_H

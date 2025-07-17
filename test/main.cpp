@@ -5,9 +5,9 @@ int main_test()
 {
     ResourceManager resourceManager;
     resourceManager.addLoader(new TestLoader());
-    resourceManager.printLoaders();
+    std::cout << resourceManager.printLoaders();
     resourceManager.addKeys("test/resources.rslf");
-    resourceManager.printKeys();
+    std::cout << resourceManager.printKeys();
     Resource* resource = resourceManager.get("example_resource");
     std::string* res = resource->get<std::string>();
     if (res)
@@ -26,9 +26,9 @@ int policy_load_test()
 {
     ResourceManager resourceManager;
     resourceManager.addLoader(new TestLoader());
-    resourceManager.printLoaders();
+    std::cout << resourceManager.printLoaders();
     resourceManager.addKeys("test/policy_load.rslf");
-    resourceManager.printKeys();
+    std::cout << resourceManager.printKeys();
 
     std::cout << "Testing resource loading policies..." << std::endl;
     
@@ -71,11 +71,11 @@ int policy_load_test()
     }
     delete collectibleResource;
 
-    resourceManager.printKeys();
+    std::cout << resourceManager.printKeys();
 
     std::cout << "Testing resource trashing..." << std::endl;
     resourceManager.trashResource(1000);
-    resourceManager.printKeys();
+    std::cout << resourceManager.printKeys();
 
     resourceManager.purgeKeys();
     resourceManager.purgeLoaders();
@@ -87,9 +87,9 @@ int dynamic_hash_test()
 {
     ResourceManager resourceManager;
     resourceManager.addLoader(new TestLoader());
-    resourceManager.printLoaders();
+    std::cout << resourceManager.printLoaders();
     resourceManager.addKeys("test/dynamic_hash.rslf");
-    resourceManager.printKeys();
+    std::cout << resourceManager.printKeys();
 
     std::cout << "Testing dynamic hash..." << std::endl;
     
