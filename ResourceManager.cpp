@@ -61,6 +61,7 @@ void ResourceManager::addKeys(std::string path)
             params.push_back(getNextValue(line));
         }
         hash_t hashValue = hash(key.c_str());
+        this->data.find(hashValue) != this->data.end() ? delete this->data[hashValue] : void(); // if the key already exists, delete the old handler before creating a new one
         this->data[hashValue] = new ResourceHandler(this->loaders[hash(loader.c_str())], path, params,
                                                 loading_policy == "static" ? 1 : 0, loading_policy == "collected");
     }
@@ -141,7 +142,7 @@ void ResourceManager::purgeKeys()
 }
 void ResourceManager::trashResource(clock_t timeout)
 {
-    // from sfml clock.hpp
+    // from SFML clock.hpp
     using clock = std::conditional_t<
         std::chrono::high_resolution_clock::is_steady,
         std::chrono::high_resolution_clock,

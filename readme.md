@@ -5,7 +5,9 @@ Resource Manager is a library designed to help you efficiently allocate and mana
 ## Features
 
 - Add, manage, and remove resources
-- remove unused resouce
+- remove unused resources
+- load rslf(ReSource List File) files to append multiple resources at once
+- custom resources loaders
 
 ## TODO
 - Track resource usage and availability 
@@ -14,7 +16,7 @@ Resource Manager is a library designed to help you efficiently allocate and mana
 ## Keys politic
 - static (always loaded)
 - streamed (unloaded when not used)
-- colected (clenup when whented)
+- collected (cleanup when wanted)
 
 ## Contributing
 
@@ -22,4 +24,4 @@ Contributions are welcome! Please open issues or submit pull requests.
 
 ## License
 
-This project is licensed under the (TODO).
+This project is licensed under the MIT License.

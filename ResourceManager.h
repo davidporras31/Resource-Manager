@@ -29,15 +29,20 @@ public:
     /// @param loader the loader to add
     /// @note The loader will be deleted when the resource manager is destroyed.
     void addLoader(ResourceLoader* loader);
+    /// @brief prints all loaders
+    /// @return a string containing all loaders and their IDs
     std::string printLoaders();
+    /// @brief removes a loader from the resource manager
     void purgeLoaders();
 
-    /// @brief adds keys from a file rslf (ReSource List File)
+    /// @brief append keys from a file rslf (ReSource List File)
     /// @param path file path to the rslf file
     void addKeys(std::string path);
     /// @brief removes a key from the resource manager
     /// @param key the key to remove
     void removeKey(const std::string& key);
+    /// @brief prints all keys
+    /// @return a string containing all keys and their associated loader and there status
     std::string printKeys();
     /// @brief removes all keys from a specific rslf file
     /// @param path the path to the rslf file
@@ -45,6 +50,7 @@ public:
     /// @brief removes all keys from a specific loader
     /// @param loaderName the name of the loader
     void purgeKeysFromLoader(const std::string& loaderName);
+    /// @brief removes all keys from the resource manager
     void purgeKeys();
 
     /// @brief destroys all resources in the trash of all loaders
@@ -59,6 +65,11 @@ public:
     /// @note The resource will be loaded if it is not already loaded.
     /// remember to delete the resource when you are done with it.
     Resource* get(const char* name);
+    /// @brief gets a resource by its hash
+    /// @param hash the hash of the resource
+    /// @return a pointer to the resource, or exception if the resource is not found
+    /// @note The resource will be loaded if it is not already loaded.
+    /// remember to delete the resource when you are done with it.
     Resource* getFromHash(const hash_t& hash);
 };
 class versionMismatchException : public std::exception

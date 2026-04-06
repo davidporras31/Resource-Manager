@@ -1,28 +1,27 @@
 
-COMPYLE_ARGS := -g -std=c++17 -Wall
+COMPYLE_ARGS := -Wall
 
-all: config test
+all: bin/main.out
 
-config:
-	mkdir -p bin
-	mkdir -p obj
+bin:
+	mkdir bin
+obj:
+	mkdir obj
 
-resource-manager:
+obj/resource-manager.o: ResourceManager.cpp ResourceManager.h obj
 	g++ ${COMPYLE_ARGS}  -o obj/resource-manager.o -c ResourceManager.cpp
-resource-loader:
+obj/resource-loader.o: ResourceLoader.cpp ResourceLoader.h obj
 	g++ ${COMPYLE_ARGS}  -o obj/resource-loader.o -c ResourceLoader.cpp
-resource-handler:
+obj/resource-handler.o: ResourceHandler.cpp ResourceHandler.h obj
 	g++ ${COMPYLE_ARGS}  -o obj/resource-handler.o -c ResourceHandler.cpp
-hash:
+obj/hash.o: hash.cpp hash.h obj
 	g++ ${COMPYLE_ARGS}  -o obj/hash.o -c hash.cpp
 	
 clean:
-	rm -rf bin/*
-	rm -rf obj/*
-	rmdir bin
-	rmdir obj
+	rm -rf bin
+	rm -rf obj
 
-test: resource-manager resource-loader test-loader resource-handler hash
-	g++ ${COMPYLE_ARGS}  -o bin/resource-manager.exe test/main.cpp obj/resource-loader.o obj/test-loader.o obj/resource-manager.o obj/resource-handler.o obj/hash.o
-test-loader:
+bin/main.out: test/main.cpp obj/resource-manager.o obj/resource-loader.o obj/test-loader.o obj/resource-handler.o obj/hash.o bin
+	g++ ${COMPYLE_ARGS}  -o bin/main.out test/main.cpp obj/resource-loader.o obj/test-loader.o obj/resource-manager.o obj/resource-handler.o obj/hash.o
+obj/test-loader.o: test/TestLoader.cpp test/TestLoader.h obj
 	g++ ${COMPYLE_ARGS}  -o obj/test-loader.o -c test/TestLoader.cpp
