@@ -51,7 +51,7 @@ void ResourceHandler::loadResource()
 {
     if (!resource)
     {
-        resource = loader->loadResources(path, params);
+        resource = loader->loadResources(path, &params);
     }
 }
 

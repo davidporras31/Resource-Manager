@@ -51,6 +51,25 @@ int main() {
 
     return 0;
 }
+```
+create custom resource loader by inheriting from ResourceLoader and implementing the load and unload methods.
+```cpp
+#include <iostream>
+#include "ResourceLoader.h"
+class FooLoader : public ResourceLoader {
+public:
+    void* load(std::string path, DynamicArray<std::string>* params) override {
+        // Implement loading logic for Foo resource
+        std::string* foo = new std::string("This is a Foo resource loaded from " + path);
+        return foo;
+    }
+
+    void unload(void *resource) override {
+        std::cout << "Unloading resource." << std::endl;
+        delete (std::string*)resource;
+    }
+};
+```
 
 ## Contributing
 

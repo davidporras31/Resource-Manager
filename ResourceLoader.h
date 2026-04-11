@@ -1,10 +1,10 @@
 #ifndef RESOURCELOADER_H
 #define RESOURCELOADER_H
 #include <string>
-#include <vector>
 #include <deque>
 #include <algorithm>
 #include "hash.h"
+#include "DynamicArray.h"
 
 class ResourceLoader {
 public:
@@ -15,7 +15,7 @@ public:
     /// @param path the path to the resource file
     /// @param params optional parameters for loading the resource
     /// @return a pointer to the loaded resource, or nullptr if loading failed
-    virtual void* loadResources(std::string path, std::vector<std::string> params)= 0;
+    virtual void* loadResources(std::string path, DynamicArray<std::string>* params)= 0;
     /// @brief unloads a resource
     /// @param resource the resource to unload
     /// @details This function should be implemented to properly release the resource.

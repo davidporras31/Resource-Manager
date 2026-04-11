@@ -8,7 +8,7 @@ class TestLoader : public ResourceLoader
 public:
     TestLoader();
 
-    void* loadResources(std::string path, std::vector<std::string> params) override;
+    void* loadResources(std::string path, DynamicArray<std::string>* params) override;
     void unloadResources(void* resource) override;
 };
 

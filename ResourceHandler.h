@@ -4,6 +4,7 @@
 #include <atomic>
 #include <cstddef>
 #include "ResourceLoader.h"
+#include "DynamicArray.h"
 
 class ResourceHandler {
 public:
@@ -32,7 +33,7 @@ private:
     void* resource;
     ResourceLoader* loader;
     std::string path;
-    std::vector<std::string> params;
+    DynamicArray<std::string> params;
 };
 
 #endif // RESOURCE_HANDLER_H

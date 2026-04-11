@@ -5,12 +5,12 @@ TestLoader::TestLoader():ResourceLoader("Test")
 
 }
 
-void* TestLoader::loadResources(std::string path, std::vector<std::string> params)
+void* TestLoader::loadResources(std::string path, DynamicArray<std::string>* params)
 {
     std::cout << "Loading resource with path: " << path << std::endl;
-    for (const auto& param : params)
+    for (size_t i = 0; i < params->getSize(); ++i)
     {
-        std::cout << "Param: " << param << std::endl;
+        std::cout << "Param: " << (*params)[i] << std::endl;
     }
     // For demonstration purposes, we will return a simple char resource.
     return new std::string("Test Resource");
