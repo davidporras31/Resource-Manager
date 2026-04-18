@@ -141,5 +141,7 @@ int main()
         std::cerr << "dynamic_hash_test failed with code: " << result << std::endl;
         return result;
     }
+    std::cout << std::endl;
+    std::cout << "All tests passed successfully!" << std::endl;
     return 0;
 }
