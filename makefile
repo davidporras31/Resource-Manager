@@ -4,8 +4,19 @@
 CXX = g++
 # select compiler flags
 CXXFLAGS = -Wall
+# build shared library or executable
+BUILD_SHARED_LIBS=OFF
+
+ifeq ($(BUILD_SHARED_LIBS),ON)
+
+CXXFLAGS += -fPIC
+all: bin/resource-manager.so
+
+else
 
 all: bin/main.out
+
+endif
 
 bin:
 	mkdir bin
@@ -24,6 +35,8 @@ obj/hash.o: hash.cpp hash.h obj
 clean:
 	rm -rf bin
 	rm -rf obj
+bin/resource-manager.so: obj/resource-manager.o obj/resource-loader.o obj/resource-handler.o obj/hash.o bin
+	$(CXX) $(CXXFLAGS) -shared -o bin/resource-manager.so obj/resource-loader.o obj/resource-manager.o obj/resource-handler.o obj/hash.o
 
 bin/main.out: test/main.cpp obj/resource-manager.o obj/resource-loader.o obj/test-loader.o obj/resource-handler.o obj/hash.o bin
 	$(CXX) $(CXXFLAGS) -o bin/main.out test/main.cpp obj/resource-loader.o obj/test-loader.o obj/resource-manager.o obj/resource-handler.o obj/hash.o
