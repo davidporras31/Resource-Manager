@@ -10,7 +10,7 @@ BUILD_SHARED_LIBS=OFF
 ifeq ($(BUILD_SHARED_LIBS),ON)
 
 CXXFLAGS += -fPIC
-all: bin/resource-manager.so
+all: bin/libresourcemanager.so
 
 else
 
@@ -35,8 +35,8 @@ obj/hash.o: hash.cpp hash.h obj
 clean:
 	rm -rf bin
 	rm -rf obj
-bin/resource-manager.so: obj/resource-manager.o obj/resource-loader.o obj/resource-handler.o obj/hash.o bin
-	$(CXX) $(CXXFLAGS) -shared -o bin/resource-manager.so obj/resource-loader.o obj/resource-manager.o obj/resource-handler.o obj/hash.o
+bin/libresourcemanager.so: obj/resource-manager.o obj/resource-loader.o obj/resource-handler.o obj/hash.o bin
+	$(CXX) $(CXXFLAGS) -shared -o bin/libresourcemanager.so obj/resource-loader.o obj/resource-manager.o obj/resource-handler.o obj/hash.o
 
 bin/main.out: test/main.cpp obj/resource-manager.o obj/resource-loader.o obj/test-loader.o obj/resource-handler.o obj/hash.o bin
 	$(CXX) $(CXXFLAGS) -o bin/main.out test/main.cpp obj/resource-loader.o obj/test-loader.o obj/resource-manager.o obj/resource-handler.o obj/hash.o
